@@ -17,11 +17,23 @@ class ThingSpec extends Specification {
     def cleanup() {
     }
 
-    void "test something"() {
+    void "test insert"() {
         when:
-            Thing thing1 = new Thing(hello: 1, world: 2).save(flush: true)
+            Thing thing1 = new Thing(hello: 1, world: 2).insert(flush: true)
             sessionFactory.currentSession.flush()
-            Thing thing2 = new Thing(hello: 1, world: 2).save(flush: true)
+            Thing thing2 = new Thing(hello: 1, world: 2).insert(flush: true)
+
+        then:
+            !thing1.hasErrors()
+            thing2.hasErrors()
+
+    }
+
+    void "test save"() {
+        when:
+            Thing thing1 = new Thing(hello: 1, world: 2).save(insert: true, flush: true)
+            sessionFactory.currentSession.flush()
+            Thing thing2 = new Thing(hello: 1, world: 2).save(insert: true, flush: true)
 
         then:
             !thing1.hasErrors()
