@@ -1,9 +1,9 @@
 package uniquefailure
 
-
 import grails.test.mixin.integration.Integration
 import grails.transaction.*
 import org.hibernate.SessionFactory
+import org.springframework.dao.DuplicateKeyException
 import spock.lang.*
 
 @Integration
@@ -24,6 +24,7 @@ class ThingSpec extends Specification {
             Thing thing2 = new Thing(hello: 1, world: 2).insert(flush: true)
 
         then:
+            notThrown(DuplicateKeyException)
             !thing1.hasErrors()
             thing2.hasErrors()
 
@@ -36,6 +37,7 @@ class ThingSpec extends Specification {
             Thing thing2 = new Thing(hello: 1, world: 2).save(insert: true, flush: true)
 
         then:
+            notThrown(DuplicateKeyException)
             !thing1.hasErrors()
             thing2.hasErrors()
 
